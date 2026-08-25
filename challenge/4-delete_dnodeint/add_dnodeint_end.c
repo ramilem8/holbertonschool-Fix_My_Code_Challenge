@@ -1,39 +1,45 @@
-#include <string.h>
-#include <stdlib.h>
 #include "lists.h"
 
 /**
- * add_dnodeint_end - Add a node at the end of a list
+ * delete_dnodeint_at_index - deletes node at index
+ * @head: pointer to head of list
+ * @index: index of node to delete
  *
- * @head: The address of the pointer to the first element of the list
- * @n: The number to store in the new element
- *
- * Return: A pointer to the new element
+ * Return: 1 on success, -1 on failure
  */
-dlistint_t *add_dnodeint_end(dlistint_t **head, const int n)
+int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
 {
-	dlistint_t *new;
-	dlistint_t *l;
+	dlistint_t *tmp;
+	unsigned int i = 0;
 
-	new = malloc(sizeof(dlistint_t));
-	if (new == NULL)
-	{
-		return (NULL);
-	}
-	new->n = n;
-	new->next = NULL;
 	if (*head == NULL)
+		return (-1);
+
+	tmp = *head;
+
+	if (index == 0)
 	{
-		*head = new;
-		new->prev = NULL;
-		return (new);
+		*head = tmp->next;
+		if (*head != NULL)
+			(*head)->prev = NULL;
+		free(tmp);
+		return (1);
 	}
-	l = *head;
-	while (l->next != NULL)
+
+	while (tmp != NULL && i != index)
 	{
-		l = l->next;
+		tmp = tmp->next;
+		i++;
 	}
-	l->next = new;
-	new->prev = l;
-	return (new);
+
+	if (tmp == NULL)
+		return (-1);
+
+	if (tmp->prev != NULL)
+		tmp->prev->next = tmp->next;
+	if (tmp->next != NULL)
+		tmp->next->prev = tmp->prev;
+
+	free(tmp);
+	return (1);
 }
