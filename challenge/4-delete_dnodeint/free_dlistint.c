@@ -1,22 +1,18 @@
 #include "lists.h"
-#include <stdio.h>
+#include <stdlib.h>
 
 /**
- * print_dlistint - Prints all elements of a dlistint_t list
- * @h: pointer to the head of the list
- *
- * Return: number of nodes
+ * free_dlistint - Frees a dlistint_t list
+ * @head: pointer to the head of the list
  */
-size_t print_dlistint(const dlistint_t *h)
+void free_dlistint(dlistint_t *head)
 {
-	size_t count = 0;
+	dlistint_t *next;
 
-	while (h != NULL)
+	while (head != NULL)
 	{
-		printf("%d\n", h->n);
-		count++;
-		h = h->next;
+		next = head->next;
+		free(head);
+		head = next;
 	}
-
-	return (count);
 }
