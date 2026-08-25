@@ -2,45 +2,37 @@
 #include <stdlib.h>
 
 /**
- * delete_dnodeint_at_index - deletes node at index
- * @head: pointer to head of list
- * @index: index of node to delete
+ * add_dnodeint_end - Adds a node at the end of a dlistint_t list
+ * @head: pointer to the head of the list
+ * @n: number to add
  *
- * Return: 1 on success, -1 on failure
+ * Return: address of the new element, or NULL if it failed
  */
-int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
+dlistint_t *add_dnodeint_end(dlistint_t **head, const int n)
 {
-	dlistint_t *tmp;
-	unsigned int i = 0;
+	dlistint_t *new_node;
+	dlistint_t *current;
+
+	new_node = malloc(sizeof(dlistint_t));
+	if (new_node == NULL)
+		return (NULL);
+
+	new_node->n = n;
+	new_node->next = NULL;
+	new_node->prev = NULL;
 
 	if (*head == NULL)
-		return (-1);
-
-	tmp = *head;
-
-	if (index == 0)
 	{
-		*head = tmp->next;
-		if (*head != NULL)
-			(*head)->prev = NULL;
-		free(tmp);
-		return (1);
+		*head = new_node;
+		return (new_node);
 	}
 
-	while (tmp != NULL && i != index)
-	{
-		tmp = tmp->next;
-		i++;
-	}
+	current = *head;
+	while (current->next != NULL)
+		current = current->next;
 
-	if (tmp == NULL)
-		return (-1);
+	current->next = new_node;
+	new_node->prev = current;
 
-	if (tmp->prev != NULL)
-		tmp->prev->next = tmp->next;
-	if (tmp->next != NULL)
-		tmp->next->prev = tmp->prev;
-
-	free(tmp);
-	return (1);
+	return (new_node);
 }
